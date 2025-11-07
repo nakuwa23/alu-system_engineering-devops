@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Script that installs and configures Nginx web server
+
+# Update package list
+apt-get update -y
+
+# Install Nginx
+apt-get install -y nginx
+
+# Create a custom index page with "Holberton School"
+echo "Holberton School" > /var/www/html/index.html
+
+# Restart Nginx without using systemctl
+service nginx restart
