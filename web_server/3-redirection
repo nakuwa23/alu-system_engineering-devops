@@ -7,10 +7,10 @@ sudo apt-get -y install nginx
 echo "Holberton School" | sudo tee /var/www/html/index.html
 
 # Add redirect configuration
-sudo sed -i '/server_name _;/a \
+sudo sed -i "/server_name _;/a \
     location /redirect_me {\n\
         return 301 https://www.youtube.com/;\n\
-    }' /etc/nginx/sites-available/default
+    }" /etc/nginx/sites-available/default
 
 sudo nginx -t
 sudo service nginx reload
