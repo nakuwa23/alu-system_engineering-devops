@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
-# Script that configures Nginx with a 301 redirect
+# Script that configures Nginx to serve "Holberton School" and redirect /redirect_me
 
 sudo apt-get -y update
 sudo apt-get -y install nginx
 
 echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Redirection configuration
-replacement="server_name _;\\
-    location /redirect_me {\\
-        return 301 https://github.com;\\
-    }"
-sudo sed -i "s|server_name _;|$replacement|" /etc/nginx/sites-available/default
+# Add redirect configuration
+sudo sed -i '/server_name _;/a \
+    location /redirect_me {\n\
+        return 301 https://www.youtube.com/;\n\
+    }' /etc/nginx/sites-available/default
 
 sudo nginx -t
-sudo service nginx restart
+sudo service nginx reload
 
