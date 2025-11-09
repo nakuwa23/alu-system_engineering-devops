@@ -1,59 +1,42 @@
 #!/usr/bin/env bash
-# install load balancer
+# Script that installs and configures HAProxy load balancer
 
 
-echo -e "Updating and doing some minor checks...\n"
+apt-get update -y
+apt-get install -y haproxy
 
-function install() {
-	command -v "$1" &> /dev/null
+echo "ENABLED=1" > /etc/default/haproxy
 
-	if [ $? -ne 0 ]; then
-		echo -e "	Installing: $1\n"
-		sudo apt-get update -y -qq && \
-			sudo apt-get install -y "$1" -qq
-		echo -e "\n"
-	else
-		echo -e "	${1} is already installed.\n"
-	fi
-}
+cp /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg.backup
 
-install haproxy 
+cat > /etc/haproxy/haproxy.cfg << 'EOF'
+global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
 
-echo -e "\nSetting up some minor stuff.\n"
-
-sudo cp /etc/haproxy/haproxy.cfg haproxy_default.backup
-
-server_config=\
-"
 defaults
-  mode http
-  timeout client 15s
-  timeout connect 10s
-  timeout server 15s
-  timeout http-request 10s
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
 
-frontend clickviral-tech-frontend
+frontend http_front
     bind *:80
-    default_backend clickviral-tech-backend
+    default_backend http_back
 
-backend clickviral-tech-backend
+backend http_back
     balance roundrobin
-    server 6323-web-01 107.22.35.24:80 check
-    server 6323-web-02 52.90.129.239:80 check
-"
+    server 6805-web-01 check
+    server 6805-web-02 check
+EOF
 
-echo "$server_config" | sudo dd status=none of=/etc/haproxy/haproxy.cfg
-
-echo "ENABLED=1" | sudo dd status=none of=/etc/default/haproxy
-
-echo "configured - Roundrobin On web-01 & web-02"
-
-if [ "$(pgrep -c haproxy)" -le 0 ]; then
-	sudo service haproxy start
-else
-	sudo service haproxy restart
-fi
-
-echo -e "web-01 web-02"
-echo "web-01"
-echo "web-02"
+service haproxy restart
