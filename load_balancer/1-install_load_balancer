@@ -35,8 +35,8 @@ frontend http_front
 
 backend http_back
     balance roundrobin
-    server 6805-web-01 check
-    server 6805-web-02 check
+    server 6805-web-01 44.211.202.86:80 check
+    server 6805-web-02 44.204.180.194:80 check
 EOF
 
 service haproxy restart
