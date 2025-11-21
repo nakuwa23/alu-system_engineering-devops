@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#Script that installs Nginx, stops conflicting services, and starts Nginx on port 80
+# Script that installs Nginx, stops conflicting services, and starts Nginx on port 80
 
 sudo apt-get update -y
 sudo apt-get install -y nginx
