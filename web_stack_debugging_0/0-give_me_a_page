@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#A script that fixes Apache and provides a Hello Holberton page
+# A script that fixes Apache and provides a Hello Holberton page
 
 apt-get update -y
 apt-get install -y apache2
