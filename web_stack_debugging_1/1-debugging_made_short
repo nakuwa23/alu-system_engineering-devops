@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # Script that fixes Nginx not listening on port 80
 sed -i 's/listen 80 default_server/listen 80/' /etc/nginx/sites-enabled/default
-nginx -g "daemon off" &
+nginx -g "daemon off;" &
 
