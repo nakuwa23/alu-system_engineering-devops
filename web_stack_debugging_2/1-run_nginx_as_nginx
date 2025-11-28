@@ -7,9 +7,9 @@ sed -i 's/^user .*/user nginx;/' /etc/nginx/nginx.conf
 sed -i 's/listen 80/listen 8080/g' /etc/nginx/sites-available/default
 sed -i 's/listen \[::\]:80/listen \[::\]:8080/g' /etc/nginx/sites-available/default
 
-chown -R nginx:nginx /var/log/nginx
-chown -R nginx:nginx /var/lib/nginx
+mkdir -p /var/log/nginx /var/lib/nginx
+chown -R nginx:nginx /var/log/nginx /var/lib/nginx
 
 pkill -f nginx
-nginx
+su -s /bin/bash nginx -c "nginx"
 
