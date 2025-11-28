@@ -5,4 +5,3 @@ sudo sed -Ei 's/^\s*#?\s*user .*/user nginx/' /etc/nginx/nginx.conf
 sudo sed -Ei 's/(listen (\[::\]:)?80) /\180 /' /etc/nginx/sites-enabled/default
 sudo pkill -f nginx || true
 sudo service nginx start
-
