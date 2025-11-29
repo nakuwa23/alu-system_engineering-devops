@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Script that fixes Nginx to listen on port 80 in 5 lines or less
-sed -i 's/8080/80/g' /etc/nginx/sites-enabled/default
-pkill apache2
-nginx
+# Script that fixes nginx to listen on port 80 in a container
+apt-get update -y
+apt-get install -y nginx
+sed -i 's/listen 80 default_server/listen 80/' /etc/nginx/sites-enabled/default
